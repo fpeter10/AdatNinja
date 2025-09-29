@@ -395,13 +395,13 @@ with open('saved_commands.json', 'r') as file:
     commands = json.load(file)
 
 # Access the command for the first entry
-loaded_command = commands[0]
-command = loaded_command.get('command')
+#loaded_command = commands[0]
+#command = loaded_command.get('command')
 
-command = str(command)
+#command = str(command)
 
 # Proceed with splitting the command
-command_parts = command.split()
+#command_parts = command.split()
 # Execute the command or further processing
 
 def main():

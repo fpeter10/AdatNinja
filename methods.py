@@ -33,13 +33,13 @@ def type_print(text, test_mode = False, color=colorama.Fore.WHITE, base_speed=0.
 def get_greeting():
     current_hour = datetime.now().hour
     if 5 <= current_hour < 9:
-        return "good morning"
+        return "Good morning"
     elif 9 <= current_hour < 18:
-        return "have a nice day"
+        return "Have a nice day"
     elif 18 <= current_hour < 23:
-        return "good evening"
+        return "Good evening"
     else:
-        return "it is late, better to sleep!"
+        return "It is late, better to sleep!"
 
 def get_user_name(filename="user.txt"):
     try:
@@ -50,7 +50,7 @@ def get_user_name(filename="user.txt"):
     except FileNotFoundError:
         pass
     
-    text = f"Hello, thank you for downloading me, I am AdatNinja to handle your data like a true Ninja. please enter your name: "
+    text = f"Hello, thank you for downloading me, I am AdatNinja to handle your data like a true Ninja. Please enter your name: "
     type_print(text)
     name = input("Name: ").strip()
     with open(filename, "w") as file:
