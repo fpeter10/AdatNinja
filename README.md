@@ -163,3 +163,43 @@ Whether it's changing separators, splitting columns, merging tables, or calculat
 ---
 
 ## Colorful Error Handling
+---
+Errors, warnings, and messages appear in color in the terminal if invalid values are entered.  
+You can then correct the inputs and continue.
+
+- **Green message**: everything ran successfully.  
+- **Red message**: invalid file, column, or value — choose a correct one!  
+- **Yellow message**: informational.  
+- **Light blue**: code snippets.  
+- **Dark blue**: tables.
+
+---
+
+## Reusing Previous Commands
+---
+- Use ***load*** to retrieve previous runs.  
+- ***load last_code*** automatically shows the last 5 commands, while ***load code*** lets you access saved commands.  
+- Select a command by number, e.g., ***load last_code 1*** for the most recent one — it persists even after exiting.  
+- Then select what you want to do.  
+- ***check*** prints the command for verification.  
+- ***run*** executes the command again.  
+- ***modify*** lets you edit all parameters interactively; press enter to keep the current value.  
+- ***save*** stores it in the ***load code*** database with an optional note.
+
+---
+
+## 🚀 Usage
+
+### 1. Installation
+
+Install the latest Python version: [https://www.python.org/downloads/](https://www.python.org/downloads/)  
+
+Then download the program:  
+[https://github.com/fpeter10/AdatNinja.git](https://github.com/fpeter10/AdatNinja.git)
+
+Open a command prompt (CMD). All required packages will be installed automatically, and updates are checked weekly.  
+The easiest way to start is by clicking the **start_program** icon.
+
+```bash
+cd AdatNinja-main
+python AdatNinja.py
