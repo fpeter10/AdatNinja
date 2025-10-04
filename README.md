@@ -10,23 +10,32 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 ## ⚙️ Fő funkciók
 
-- **Statisztikák számítása**  
+- **Statisztikák számítása**
+- **stat**  
   Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
 
-- **Wilcoxon és t-teszt statisztika teszt számítása**  
-  Minden névre és minden csoportra kiszámítja, ha globálisan akarjuk, akkor none -t kell választani.
+- **Wilcoxon és t-teszt statisztika teszt számítása**
+- **wilcoxon** and **ttest**
+  Minden névre és minden csoportra kiszámítja, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani.
 
+- **Normális eloszlás teszt számítása**  
+  Derítsd ki, hogy az adott minta csoport normális eloszlást mutat e!
+  
+- **Táblák összefésülése**  
+  Két táblát a azonosító (`id_col`) alapján összekapcsolhatsz, illetve válassz más kapcsolódás közül.
+
+- **Adatok relatívizálása**  
+  Csoportonként vagy globálisan számíthatsz arányokat vagy százalékot.
+  
 - **Szeparátor és tizedesjel módosítás**  
   Könnyedén átalakíthatod a fájlokat különböző elválasztókkal (`;`, `,`, `|`, `tab`).
 
 - **Oszlopok szétválasztása**  
   Egy összetett oszlopot (pl. `A_B_C`) több külön oszlopra bonthatsz.
 
-- **Táblák összefésülése**  
-  Két táblát egy közös azonosító (`id_col`) alapján összekapcsolhatsz.
 
-- **Adatok relatív normalizálása**  
-  Csoportonként vagy globálisan számíthatsz arányokat vagy százalékokat.
+
+
 
 
 
