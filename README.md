@@ -61,10 +61,8 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
       ***print_table*** Ha nem tudod pontosan hogy néz ki a tábla, írasd ki, és kapsz infót az oszlopok típusáról is
 
 
-## Színes hibakezelés  
-  Hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
+## Színes hibakezelés: A hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
 ---
-
 - Zöld színű üzenet: minden rendben a program lefutott.
 - Piros színű üzenet: Hibás fájl, oszlop, érték, válassz megfelelőt!
 - Sárga színű üzenet: Infó.
