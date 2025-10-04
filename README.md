@@ -7,13 +7,14 @@
 Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák összefésüléséről vagy statisztikák számításáról — AdatNinja mindent elintéz, csendben, precízen, mint egy igazi ninja. 🥷
 
 ---
-## Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
-### Ha nem megfelelő a **change wd** parancssal lehet mappát váltani.
+- Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
+- Ha nem megfelelő a **change wd** parancssal lehet mappát váltani.
 
-##  A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
+A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
+---
 
 ## ⚙️ Fő funkciók
-
+---
 - **Statisztikák számítása**  
       ***stat*** Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
   
