@@ -13,8 +13,8 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 - **Statisztikák számítása**  
     ***stat***  Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
 
-- **Wilcoxon és t-teszt statisztika teszt számítása** *wilcoxon* és *ttest*
-- Minden névre és minden csoportra kiszámítja, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani
+- **Wilcoxon és t-teszt statisztika teszt számítása**
+  ***wilcoxon*** és ***ttest*** Minden névre és minden csoportra kiszámítja, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani
   
 
 - **Normális eloszlás teszt** *normality*
