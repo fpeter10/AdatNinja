@@ -87,7 +87,7 @@ Majd töltsd le a programot
 
 https://github.com/fpeter10/AdatNinja.git
 
-Nyiss meg egy parancssort a CMD paranccsal.
+Nyiss meg egy parancssort a CMD paranccsal. Az összes szükséges csomagot automatikusan letölti, illetve hetente ellenőrzi, hogy nincs e frissítés.
 
 ```bash
 
