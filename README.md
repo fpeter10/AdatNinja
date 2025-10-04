@@ -58,9 +58,10 @@ Majd töltsd le a programot
 
 https://github.com/fpeter10/AdatNinja.git
 
-```bash
-git clone https://github.com/fpeti/AdatNinja.git
+Nyiss meg egy parancssort a CMD paranccsal.
 
-cd AdatNinja
+```bash
+
+cd AdatNinja-main
 
 python AdatNinja.py
