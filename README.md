@@ -1,7 +1,4 @@
 # 🥷 AdatNinja
-**AdatNinja** is a command-line tool that helps you handle data easily. It can merge tables, calculate different statistics, and reshape your data, and a lot more. It also catches errors and shows them in a colorful, easy-to-read way.
-
-# 🥷 AdatNinja
 
 **AdatNinja** egy sokoldalú, parancssoros adatkezelő eszköz, amely segít a táblázatos adatok (CSV, TSV) gyors és rugalmas átalakításában.  
 Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák összefésüléséről vagy statisztikák számításáról — AdatNinja mindent elintéz, csendben, precízen, mint egy igazi ninja. 🥷
@@ -100,3 +97,69 @@ A legegyszerűbb indítás a **start_program** ikonra kattintással lehetséges.
 cd AdatNinja-main
 
 python AdatNinja.py
+
+
+# 🥷 AdatNinja
+
+**AdatNinja** is a versatile, command-line data handling tool that helps you quickly and flexibly manipulate tabular data (CSV, TSV).  
+Whether it's changing separators, splitting columns, merging tables, or calculating statistics — AdatNinja handles everything quietly and precisely, like a real ninja. 🥷
+
+---
+
+## How to Use
+---
+- Enter your name when the program starts so the Ninja can greet you based on the time of day.
+- Place all your data in a folder; you can select the folder when starting the program.
+- Choose the command you want to run. The program will keep asking until all parameters are valid.
+- Use the ***programs*** command to list all available programs.
+- Use the ***list*** command to list additional available functions.
+- Use the ***help*** command to view help. Once done, return to the main menu with the ***main*** command.
+- From the main menu, the selected folder can be displayed with the ***wd*** command.
+- Change the folder with the ***change wd*** command if needed.
+- Tab is your friend — pressing it shows suggestions while typing commands.
+- For multiple-choice options, start typing the second word to see suggestions.
+- Exit anytime with the ***exit*** command, or return to the main menu with ***main***.
+- Use the ***info*** command to see how many times you have used each program.
+---
+
+## ⚙️ Main Features
+---
+- **Calculate Statistics**  
+    ***stat***  Quickly calculate minimum, maximum, average, standard deviation, median, and sum.
+  
+- **Wilcoxon and t-test Statistics**  
+    ***wilcoxon and ttest***  Calculates statistics for all names and groups. For global calculation (all names and groups together), select `none`.
+  
+- **Normality Test**  
+    ***normality***  Check if a given sample group follows a normal distribution.
+  
+- **Merge Tables**  
+    ***merge***  Merge two tables based on a common identifier (`id`) or choose other join methods.
+  
+- **Relative Normalization**  
+    ***relative***  Calculate ratios or percentages by group or globally.
+  
+- **Summarize Data**  
+    ***summarize***  Calculate average, sum, min, and max for all names and groups.
+
+- **Split Columns**  
+    ***split_columns***  Split a complex column (e.g., `A_B_C`) into multiple separate columns.
+
+- **Merge Columns**  
+    ***merge_columns***  Combine separate columns (e.g., 'A', 'B', 'C') into one column with a chosen separator (e.g., `A_B_C`).
+
+- **Convert to Long Format**  
+    ***long_format***  AdatNinja processes only long-format data, so convert wide-format tables to long-format for processing.
+
+- **Convert to Wide Format**  
+    ***wide_format***  Convert a table back to standard wide format. Make sure to select all required columns.
+
+- **Change Separator and Decimal**  
+    ***change sep***  Easily change the file separator and choose the decimal mark (point or comma).
+
+- **Print Table**  
+    ***print_table***  Preview the table, including column types.
+
+---
+
+## Colorful Error Handling
