@@ -43,11 +43,6 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 
 
-
-
-
-
-
 - **Színes hibakezelés**  
   Hibák, figyelmeztetések és visszajelzések színesen jelennek meg a terminálban (`colorama`).
 
@@ -59,11 +54,12 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 Telepítsd a legjabb python-t https://www.python.org/downloads/
 
-```bash
-git clone https://github.com/fpeti/AdatNinja.git
-vagy
+Majd töltsd le a programot
 
 https://github.com/fpeter10/AdatNinja.git
+
+```bash
+git clone https://github.com/fpeti/AdatNinja.git
 
 cd AdatNinja
 
