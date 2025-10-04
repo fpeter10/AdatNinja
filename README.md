@@ -11,26 +11,33 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 ## ⚙️ Fő funkciók
 
 - **Statisztikák számítása**  
-    ***stat***  Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
+     ***stat***  Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
 
 - **Wilcoxon és t-teszt statisztika teszt számítása**
-  ***wilcoxon*** és ***ttest*** Minden névre és minden csoportra kiszámítja, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani
+     ***wilcoxon*** és ***ttest*** Minden névre és minden csoportra kiszámítja a statisztikát, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani
   
-
-- **Normális eloszlás teszt** *normality*
-- Derítsd ki, hogy az adott minta csoport normális eloszlást mutat e!
+- **Normális eloszlás teszt** 
+     ***normality*** Derítsd ki, hogy az adott minta csoport normális eloszlást mutat e!
   
-- **Táblák összefésülése** *merge*
-- Két táblát a azonosító (`id_col`) alapján összekapcsolhatsz, illetve válassz más kapcsolódás közül.
+- **Táblák összefésülése** 
+     ***merge*** Két táblát a azonosító ('id') alapján összekapcsolhatsz, illetve válassz más kapcsolódás módok közül.
 
 - **Adatok relatívizálása**  
-  Csoportonként vagy globálisan számíthatsz arányokat vagy százalékot.
+     ***relative*** Csoportonként vagy globálisan számíthatsz arányokat vagy százalékot.
+  
+- **Adatok összegzése**  
+     ***summarize*** Minden névre és minden csoportra kiszámítja az átlagot, összeget, min, max értéket.
+
+- **Oszlopok szétválasztása**  
+  ***split_columns*** Egy összetett oszlopot (pl. `A_B_C`) több külön oszlopra bonthatsz.
+
+- **Oszlopok egyesítése egy komplex oszloppá**  
+  ***merge_columns*** Az önálló oszlopokat (pl. 'A' 'B' 'C') egyesíti egyetlen oszloppá a kiválasztott elválasztóval (pl. 'A_B_C')
   
 - **Szeparátor és tizedesjel módosítás**  
   Könnyedén átalakíthatod a fájlokat különböző elválasztókkal (`;`, `,`, `|`, `tab`).
 
-- **Oszlopok szétválasztása**  
-  Egy összetett oszlopot (pl. `A_B_C`) több külön oszlopra bonthatsz.
+
 
 
 
