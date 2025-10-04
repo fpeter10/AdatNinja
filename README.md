@@ -10,12 +10,10 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 ## ⚙️ Fő funkciók
 
-- **Statisztikák számítása**
-- **stat**  
+- **Statisztikák számítása** *stat*
   Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
 
-- **Wilcoxon és t-teszt statisztika teszt számítása**
-- **wilcoxon** and **ttest**
+- **Wilcoxon és t-teszt statisztika teszt számítása** *wilcoxon* and *ttest*
   Minden névre és minden csoportra kiszámítja, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani.
 
 - **Normális eloszlás teszt számítása**  
