@@ -10,16 +10,14 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 ---
 - Add meg a neved a program indításakor, hogy a Ninja tudjon üdvözölni a napszaknak megfelelően.
 - Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
-- Válassz egy parancsot amit végre szeretnél hajtani! Az addig fog kérdezni, amíg minden paraméter nem megfelelő.
+- Válassz egy parancsot amit végre szeretnél hajtani! A program addig fog kérdezni, amíg minden paraméter nem megfelelő.
 - A ***programs*** paranccsal az elérhető programok nevét írhatod ki.
-- A ***list*** paranccsal az elérhatő funkciókat lehet listázni.
-- A ***help*** paranccsal a sugót lehet előhívni. Ha sikerült megtudni az infót a ***main*** pancssal lehet visszatérni.
----
-Egyéb: 
----
+- A ***list*** paranccsal az elérhatő egyéb funkciókat lehet listázni.
+- A ***help*** paranccsal a súgót lehet előhívni. Ha sikerült megtudni az infót a ***main*** pancssal lehet visszatérni.
+- A fő menüből a kiválasztott mappa ***wd*** paranccsal kiíratható.
 - Ha nem megfelelő a mappa ***change wd*** parancssal lehet mappát váltani.
 - A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. 
-- Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
+- Bármikor ki lehet lépni az ***exit*** paranccsal, illetve a ***main*** paranccssal visszatérni a fő menübe.
 - Az ***info*** paranccsal ki tudod íratni, hogy melyik programot hányszor használtad.
 ---
 
@@ -58,6 +56,14 @@ Egyéb:
 
 ## Színes hibakezelés  
   Hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
+---
+
+- Zöld színű üzenet: minden rendben a program lefutott.
+- Piros színű üzenet: Hibás fájl, oszlop, érték, válassz megfelelőt!
+- Sárga színű üzenet: Infó.
+- A kódokat világoskékkel.
+- A táblázatokat sötétkékkel írja ki.
+---
 
 ## Korábbi parancsok újra felhasználása
 ---
