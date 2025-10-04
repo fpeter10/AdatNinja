@@ -78,10 +78,10 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 - A ***load last_code*** az előző 5-öt automatikusan, míg a ***load code*** az általunk mentet parancsokat lehet előhíni.
 - Ezután kiválasztjuk a sorszámát, például ***load last_code 1*** a legutolsó, ez kilépés után is megmarad.
 - Ezután kiválasztjuk mit szerenénk csinálni.
-- ***check*** csak kiíratja ellenörzésre a továbbiakhoz.
-- ***run*** újra futtatja
-- ***modify*** módosítani lehet, minden paramétert végigkérdez, ami maradhat ott enter-t kell nyomni, egyébként át lehet írni.
-- ***save*** elmenti a ***load code*** adatbázisba, amihez egy üzenetet is írharunk.
+-- ***check*** csak kiíratja ellenörzésre a továbbiakhoz.
+-- ***run*** újra futtatja
+-- ***modify*** módosítani lehet, minden paramétert végigkérdez, ami maradhat ott enter-t kell nyomni, egyébként át lehet írni.
+-- ***save*** elmenti a ***load code*** adatbázisba, amihez egy üzenetet is írharunk.
 ---
   
 ## 🚀 Használat
