@@ -6,12 +6,13 @@ from pathlib import Path
 import methods as myMethods
 from last_command import save_last_command_to_json
 
-from autofill import HeaderCompleter, FileCompleter, WordCompleter
+from autofill import FileCompleter, WordCompleter
+import autofill as autofill
 
 colorama.init()
 
-separator_completer = WordCompleter(["tab", "semicolom", "colon", "pipe", "main", "exit"], ignore_case=True)
-decimal_completer = WordCompleter(["colon", "point", "main", "exit"], ignore_case=True)
+separator_completer = WordCompleter(autofill.new_separator_autofill, ignore_case=True)
+decimal_completer = WordCompleter(autofill.new_decimal_autofill, ignore_case=True)
 
 def change_sep(workdir, table_file, output_file, separator, dececimal, test_mode):
 
@@ -35,7 +36,7 @@ def change_sep(workdir, table_file, output_file, separator, dececimal, test_mode
                 
                 separator_map = {
                     "tab": "\t",
-                    "semicolom": ";",
+                    "semicolon": ";",
                     "colon": ",",
                     "pipe": "|"}
 
@@ -48,7 +49,7 @@ def change_sep(workdir, table_file, output_file, separator, dececimal, test_mode
                 dececimal = decimal_map.get(dececimal, dececimal)
 
                 if not myMethods.validate_sep(separator):
-                    raise ValueError(f"Invalid separator {separator}, choose from: tab, semicolom, colon, pipe")
+                    raise ValueError(f"Invalid separator {separator}, choose from: tab, semicolon, colon, pipe")
                 
                 if not myMethods.validate_dec(dececimal):
                     raise ValueError(f"Invalid decimal separator {dececimal}, choose from: colon, point")

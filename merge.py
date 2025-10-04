@@ -4,12 +4,13 @@ import argparse
 import colorama
 from pathlib import Path
 import methods as myMethods
+import autofill as autofill
 from last_command import save_last_command_to_json
 from autofill import HeaderCompleter, FileCompleter, WordCompleter
 
 colorama.init()
 
-join_type_completer = WordCompleter(["inner", "outer", "left", "right", "main", "exit"], ignore_case=True)
+join_type_completer = WordCompleter(autofill.merge_mode_autofill, ignore_case=True)
 
 def mergeAny(workdir, table1, table2, output_file, tab_id1, tab_id2, mode, test_mode):
 

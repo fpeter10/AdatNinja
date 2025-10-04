@@ -28,10 +28,6 @@ program_help = ['stat', 'wilcoxon','ttest', 'summarize', 'normality', 'print_tab
                 'wide_format', 'merge', 'relative', 'merge_columns', 
                 'split_columns', 'change sep', 'main', 'exit']
 
-#join_type_completer = WordCompleter(["inner", "outer", "left", "right"], ignore_case=True)   
-
-#summary_type_completer = WordCompleter(["inner", "outer", "left", "right"], ignore_case=True) 
-
 CODE_FILE = "saved_commands.json"
 
 def get_saved_code_count():
@@ -141,8 +137,6 @@ class FileCompleter(Completer):
             if option.startswith(text):
                 yield Completion(option, start_position=-len(text))
     
-
-
 class DirectoryCompleter(Completer):
     def __init__(self, only_directories=True, expanduser=True):
         self.path_completer = PathCompleter(only_directories=only_directories, expanduser=expanduser)
@@ -177,3 +171,10 @@ class MultiHeaderCompleter(Completer):
             if opt.startswith(word):
                 yield Completion(opt, start_position=-len(word))
 
+
+merge_mode_autofill = ["inner", "outer", "left", "right", "main", "exit"]
+separator_autofill = ["_", ";", ",", "|", "main", "exit"]
+new_separator_autofill = ["tab", "semicolon", "colon", "pipe", "main", "exit"]
+new_decimal_autofill = ["colon", "point", "main", "exit"]
+summary_mode_autofill = ["sum", "mean", "median", "min", "max", "main", "exit"]
+relative_summary_autofill = ["1", "10", "100", "1000", "main", "exit"]

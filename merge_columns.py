@@ -10,10 +10,11 @@ from methods import type_print
 from prompt_toolkit import prompt
 from autofill import MultiHeaderCompleter, FileCompleter, HeaderCompleter
 from prompt_toolkit.completion import WordCompleter
+import autofill as autofill
 
 colorama.init()
 
-separator_completer = WordCompleter(["_", ";", ",", "|"], ignore_case=True)
+separator_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
 
 
 def merge_categories(workdir, table_file, output_file, merge_cols, new_column, separator, test_mode):

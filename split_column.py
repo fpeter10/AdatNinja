@@ -9,6 +9,7 @@ from methods import type_print
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from autofill import HeaderCompleter, MultiHeaderCompleter, FileCompleter
+import autofill as autofill
 
 update_table = None
 update_output = None
@@ -20,7 +21,7 @@ colorama.init()
 
 
 
-separator_completer = WordCompleter(["_", ";", ",", "|"], ignore_case=True)
+separator_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
 
 def split_column_names(workdir, table_file, output_file, column_to_split, separator, new_columns, test_mode):
     

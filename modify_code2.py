@@ -6,6 +6,7 @@ from prompt_toolkit.completion import WordCompleter
 from autofill import HeaderCompleter, MultiHeaderCompleter, FileCompleter, DirectoryCompleter
 import methods as myMethods
 from methods import check_exit
+import autofill as autofill
 
 def modify_parameters(command):
     # Tokenize the command string
@@ -141,7 +142,7 @@ def modify_parameters(command):
 
         # ---- Mode selection ----
         elif tok == "--mode":
-            mode_options = ["inner", "outer", "left", "right"]
+            mode_options = autofill.merge_mode_autofill
             mode_compl = WordCompleter(mode_options, ignore_case=True)
             new_value = prompt(
                 f"Current value for {tok} is '{' '.join(current_values)}'. Choose mode ({', '.join(mode_options)}): ",
@@ -155,7 +156,7 @@ def modify_parameters(command):
 
         # ---- Summary mode selection ----
         elif tok == "--summary_mode":
-            mode_options = ["mean", "median", "sum", "min", "max"]
+            mode_options = autofill.summary_mode_autofill
             mode_compl = WordCompleter(mode_options, ignore_case=True)
             new_value = prompt(
                 f"Current value for {tok} is '{' '.join(current_values)}'. Choose mode ({', '.join(mode_options)}): ",
@@ -169,7 +170,7 @@ def modify_parameters(command):
 
         # ---- Sum value ----
         elif tok == "--sum_value":
-            sum_options = ["1", "10", "100", "1000"]
+            sum_options = autofill.relative_summary_autofill
             sum_compl = WordCompleter(sum_options, ignore_case=True)
             new_value = prompt(
                 f"Current value for {tok} is '{' '.join(current_values)}'. Recommend: 1, 10, 100, 1000 or or press Enter to keep: ",
@@ -183,7 +184,7 @@ def modify_parameters(command):
 
         # ---- separator value ----
         elif tok == "--separator":
-            sum_options = ["_", ";", ",", "|"]
+            sum_options = autofill.separator_autofill
             sum_compl = WordCompleter(sum_options, ignore_case=True)
             new_value = prompt(
                 f"Current value for {tok} is '{' '.join(current_values)}'. choose from: '_', ';', ',', '|' or press Enter to keep: ",
@@ -197,7 +198,7 @@ def modify_parameters(command):
 
         # ---- separator value ----
         elif tok == "--sep":
-            sum_options = ["tab", "semicolom", "colon", "pipe"]
+            sum_options = autofill.new_separator_autofill
             sum_compl = WordCompleter(sum_options, ignore_case=True)
             new_value = prompt(
                 f"Current value for {tok} is '{' '.join(current_values)}'. choose from: [tab], [semicolom], [colon], [pipe] or press Enter to keep: ",
@@ -210,7 +211,7 @@ def modify_parameters(command):
             i += 2
 
         elif tok == "--dec":
-            sum_options = ["colon", "point"]
+            sum_options = autofill.new_decimal_autofill
             sum_compl = WordCompleter(sum_options, ignore_case=True)
             new_value = prompt(
                 f"Current value for {tok} is '{' '.join(current_values)}'. choose from: [colon], [point] or press Enter to keep: ",

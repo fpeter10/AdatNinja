@@ -1,0 +1,5 @@
+name	comparison	statistic	p_value	significance
+gene1	control vs kezelt	9.0	0.8857142857142857	NS
+gene2	control vs kezelt	9.0	0.8857142857142857	NS
+gene3	control vs kezelt	9.5	0.7715034091403082	NS
+gene4	control vs kezelt	12.5	0.24252556197857178	NS

@@ -7,10 +7,11 @@ import methods as myMethods
 from last_command import save_last_command_to_json
 
 from autofill import HeaderCompleter, FileCompleter, WordCompleter
+import autofill as autofill
 
 colorama.init()
 
-summary_mode_completer = WordCompleter(["sum", "mean", "median", "min", "max", "main", "exit"], ignore_case=True)
+summary_mode_completer = WordCompleter(autofill.summary_mode_autofill, ignore_case=True)
 
 def calculate_summary(workdir, table_file, output_file, name_col, value_col, group_col, summary_mode, test_mode):
 

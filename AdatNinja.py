@@ -315,30 +315,30 @@ def build_command(program_key, working_dir):
             check_exit(value)
             cmd.extend([param, value])
         
-        join_type_completer = WordCompleter(["inner", "outer", "left", "right"], ignore_case=True)
+        join_type_completer = WordCompleter(autofill.merge_mode_autofill, ignore_case=True)
 
         if param in ["--mode"]:
             value = prompt("", completer=join_type_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
 
-        summary_mode_completer = WordCompleter(["sum", "mean", "median", "min", "max"], ignore_case=True)
+        summary_mode_completer = WordCompleter(autofill.summary_mode_autofill, ignore_case=True)
 
         if param in ["--summary_mode"]:
             value = prompt("", completer=summary_mode_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
 
-        separator_completer = WordCompleter(["tab", "semicolom", "colon", "pipe", "main", "exit"], ignore_case=True)
-        decimal_completer = WordCompleter(["colon", "point", "main", "exit"], ignore_case=True)
+        new_separator_completer = WordCompleter(autofill.new_separator_autofill, ignore_case=True)
+        new_decimal_completer = WordCompleter(autofill.new_decimal_autofill, ignore_case=True)
 
         if param in ["--sep"]:
-            value = prompt("", completer=separator_completer).strip()
+            value = prompt("", completer= new_separator_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
 
         if param in ["--dec"]:
-            value = prompt("", completer=decimal_completer).strip()
+            value = prompt("", completer= new_decimal_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
 
@@ -369,13 +369,13 @@ def build_command(program_key, working_dir):
             cmd.extend(value2)
 
         if param in ["--sum_value"]:
-            sum_value_completer = WordCompleter(["1", "10", "100", "1000"], ignore_case=True)
+            sum_value_completer = WordCompleter(autofill.relative_summary_autofill, ignore_case=True)
             value = prompt("", completer=sum_value_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
 
         if param in ["--separator"]:
-            sum_value_completer = WordCompleter(["_", ";", ",", "|"], ignore_case=True)
+            sum_value_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
             value = prompt("", completer=sum_value_completer).strip()
             check_exit(value)
             
@@ -393,16 +393,6 @@ def build_command(program_key, working_dir):
 
 with open('saved_commands.json', 'r') as file:
     commands = json.load(file)
-
-# Access the command for the first entry
-#loaded_command = commands[0]
-#command = loaded_command.get('command')
-
-#command = str(command)
-
-# Proceed with splitting the command
-#command_parts = command.split()
-# Execute the command or further processing
 
 def main():
 
