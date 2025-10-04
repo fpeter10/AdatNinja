@@ -12,19 +12,14 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 - **Statisztikák számítása**  
       ***stat***  Minimum, maximum, átlag és szórás, medián és összeg gyorsan kiszámíthatók.
-
 - **Wilcoxon és t-teszt statisztika teszt számítása** 
       ***wilcoxon és ttest*** Minden névre és minden csoportra kiszámítja a statisztikát, ha globálisan akarjuk (minde névre, minden csoportra egybe), akkor none -t kell választani
-  
 - **Normális eloszlás teszt** 
       ***normality*** Derítsd ki, hogy az adott minta csoport normális eloszlást mutat e!
-  
 - **Táblák összefésülése** 
       ***merge*** Két táblát a azonosító ('id') alapján összekapcsolhatsz, illetve válassz más kapcsolódás módok közül.
-
 - **Adatok relatívizálása**  
      ***relative*** Csoportonként vagy globálisan számíthatsz arányokat vagy százalékot.
-  
 - **Adatok összegzése**  
      ***summarize*** Minden névre és minden csoportra kiszámítja az átlagot, összeget, min, max értéket.
 
