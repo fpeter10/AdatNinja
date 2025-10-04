@@ -6,12 +6,21 @@
 **AdatNinja** egy sokoldalú, parancssoros adatkezelő eszköz, amely segít a táblázatos adatok (CSV, TSV) gyors és rugalmas átalakításában.  
 Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák összefésüléséről vagy statisztikák számításáról — AdatNinja mindent elintéz, csendben, precízen, mint egy igazi ninja. 🥷
 
+## Segítség a használatához
 ---
+- Add meg a neved a program indításakor, hogy a Ninja tudjon üdvözölni a napszaknak megfelelően.
 - Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
-- Ha nem megfelelő a **change wd** parancssal lehet mappát váltani.
+- Válassz egy parancsot amit végre szeretnél hajtani! Az addig fog kérdezni, amíg minden paraméter nem megfelelő.
+- A ***programs*** paranccsal az elérhető programok nevét írhatod ki.
+- A ***list*** paranccsal az elérhatő funkciókat lehet listázni.
+- A ***help*** paranccsal a sugót lehet előhívni. Ha sikerült megtudni az infót a ***main*** pancssal lehet visszatérni.
+---
+Egyéb: 
+---
+- Ha nem megfelelő a mappa ***change wd*** parancssal lehet mappát váltani.
 - A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. 
 - Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
-- Add meg a neved a program indításakor, hogy a Ninja tudjon üdvözölni.
+- Az ***info*** paranccsal ki tudod íratni, hogy melyik programot hányszor használtad.
 ---
 
 ## ⚙️ Fő funkciók
@@ -49,11 +58,19 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 ## Színes hibakezelés  
   Hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
-  
-## 
-  Hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
----
 
+## Korábbi parancsok újra felhasználása
+---
+- A ***load*** paranccsal lehet az előző futtatásokat előhívni.
+- A ***load last_code*** az előző 5-öt automatikusan, míg a ***load code*** az általunk mentet parancsokat lehet előhíni.
+- Ezután kiválasztjuk a sorszámát, például ***load last_code 1*** a legutolsó, ez kilépés után is megmarad.
+- Ezután kiválasztjuk mit szerenénk csinálni.
+- ***check*** csak kiíratja ellenörzésre a továbbiakhoz.
+- ***run*** újra futtatja
+- ***modify*** módosítani lehet, minden paramétert végigkérdez, ami maradhat ott enter-t kell nyomni, egyébként át lehet írni.
+- ***save*** elmenti a ***load code*** adatbázisba, amihez egy üzenetet is írharunk.
+---
+  
 ## 🚀 Használat
 
 ### 1. Telepítés
