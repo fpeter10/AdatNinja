@@ -16,8 +16,9 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 - A ***help*** paranccsal a súgót lehet előhívni. Ha sikerült megtudni az infót a ***main*** pancssal lehet visszatérni.
 - A fő menüből a kiválasztott mappa ***wd*** paranccsal kiíratható.
 - Ha nem megfelelő a mappa ***change wd*** parancssal lehet mappát váltani.
-- A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. 
-- Bármikor ki lehet lépni az ***exit*** paranccsal, illetve a ***main*** paranccssal visszatérni a fő menübe.
+- A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat.
+- Többszörös választás esetén a második szótól kezdjük el írni, és kapjuk a lehetőségeket.
+- Bármikor ki lehet lépni a programból az ***exit*** paranccsal, illetve a ***main*** paranccssal visszatérni a fő menübe.
 - Az ***info*** paranccsal ki tudod íratni, hogy melyik programot hányszor használtad.
 ---
 
@@ -46,6 +47,12 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 
 - **Oszlopok egyesítése egy komplex oszloppá**  
       ***merge_columns*** Az önálló oszlopokat (pl. 'A' 'B' 'C') egyesíti egyetlen oszloppá a kiválasztott elválasztóval (pl. 'A_B_C')
+
+- **Hosszú formátummá alakítás**  
+      ***long_format*** A Ninja csak hosszú formátumú adatot tud feldolgozni. Így mindig érdemes átalakítani az ember által olvashatót, a programnak megfelelő alakúvá.
+
+- **Szélés formátummá vissza alakítás**  
+      ***wide_format*** A táblázatot vissza alakítja normál széles formátummá. Fontos, hogy válaszd ki az összes oszlopot amire szükség van.
   
 - **Szeparátor és tizedesjel módosítás**  
       ***change sep***Könnyedén átalakíthatod a fájlokat különböző elválasztókkal, illetve lehet választani tízedes pont, vagy vessző közül.
@@ -88,6 +95,7 @@ Majd töltsd le a programot
 https://github.com/fpeter10/AdatNinja.git
 
 Nyiss meg egy parancssort a CMD paranccsal. Az összes szükséges csomagot automatikusan letölti, illetve hetente ellenőrzi, hogy nincs e frissítés.
+A legegyszerűbb indítás a **start_program** ikonra kattintással lehetséges.
 
 ```bash
 
