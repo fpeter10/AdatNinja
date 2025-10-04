@@ -9,8 +9,9 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 ---
 - Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
 - Ha nem megfelelő a **change wd** parancssal lehet mappát váltani.
-
-A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
+- A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. 
+- Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
+- Add meg a neved a program indításakor, hogy a Ninja tudjon üdvözölni.
 ---
 
 ## ⚙️ Fő funkciók
