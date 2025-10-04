@@ -61,5 +61,10 @@ Telepítsd a legjabb python-t https://www.python.org/downloads/
 
 ```bash
 git clone https://github.com/fpeti/AdatNinja.git
+vagy
+
+https://github.com/fpeter10/AdatNinja.git
+
 cd AdatNinja
+
 python AdatNinja.py
