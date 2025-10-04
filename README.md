@@ -203,3 +203,4 @@ The easiest way to start is by clicking the **start_program** icon.
 ```bash
 cd AdatNinja-main
 python AdatNinja.py
+```
