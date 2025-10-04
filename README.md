@@ -97,7 +97,7 @@ A legegyszerűbb indítás a **start_program** ikonra kattintással lehetséges.
 cd AdatNinja-main
 
 python AdatNinja.py
-
+```
 
 # 🥷 AdatNinja
 
