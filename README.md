@@ -7,6 +7,10 @@
 Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák összefésüléséről vagy statisztikák számításáról — AdatNinja mindent elintéz, csendben, precízen, mint egy igazi ninja. 🥷
 
 ---
+## Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
+### Ha nem megfelelő a **change wd** parancssal lehet mappát váltani.
+
+##  A tabulátor a barátunk a program használata során, lenyomva mutatja a javaslatokat. Bármikor ki lehet lépni az exit paranccsal, illetve a main paranccssal visszatérni a fő menübe.
 
 ## ⚙️ Fő funkciók
 
@@ -41,11 +45,11 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
       ***print_table*** Ha nem tudod pontosan hogy néz ki a tábla, írasd ki, és kapsz infót az oszlopok típusáról is
 
 
-
-
-- **Színes hibakezelés**  
-  Hibák, figyelmeztetések és visszajelzések színesen jelennek meg a terminálban (`colorama`).
-
+## Színes hibakezelés  
+  Hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
+  
+## 
+  Hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
 ---
 
 ## 🚀 Használat
