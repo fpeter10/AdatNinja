@@ -1,7 +1,6 @@
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import PathCompleter
-from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.completion import Completer, Completion, PathCompleter
+from prompt_toolkit.completion import Completer, Completion, PathCompleter, WordCompleter
 
 import json
 import os
@@ -20,13 +19,13 @@ class HeaderCompleter(Completer):
 
 #Keywords that should autocomplete
 fixed_keywords = ['list','programs', 'help', 'load', 'stat', 'wilcoxon',
-                'ttest', 'summarize', 'normality', 'print_table', 'long_format', 
-                'wide_format', 'merge', 'relative', 'merge_columns', 
-                'split_columns', 'change sep', 'wd', 'change wd', 'info', 'exit']
+                'ttest', 'summarize', 'normality', 'print table', 'long format', 
+                'wide format', 'merge', 'relative', 'merge columns', 
+                'split columns', 'sort table', 'change sep', 'wd', 'change wd', 'language', 'info', 'exit']
 
-program_help = ['stat', 'wilcoxon','ttest', 'summarize', 'normality', 'print_table', 'long_format', 
-                'wide_format', 'merge', 'relative', 'merge_columns', 
-                'split_columns', 'change sep', 'main', 'exit']
+program_help = ['stat', 'wilcoxon','ttest', 'summarize', 'normality', 'print table', 'long format', 
+                'wide format', 'merge', 'relative', 'merge columns', 
+                'split columns', 'sort table', 'change sep', 'main', 'exit']
 
 CODE_FILE = "saved_commands.json"
 
@@ -178,3 +177,6 @@ new_separator_autofill = ["tab", "semicolon", "colon", "pipe", "main", "exit"]
 new_decimal_autofill = ["colon", "point", "main", "exit"]
 summary_mode_autofill = ["sum", "mean", "median", "min", "max", "main", "exit"]
 relative_summary_autofill = ["1", "10", "100", "1000", "main", "exit"]
+sort_mode_autofill = ["decreasing", "increasing","main", "exit"]
+exit_autofill = ["main", "exit"]
+language_autofill = ["Magyar", "English", "main", "exit"]

@@ -1,4 +1,5 @@
 import os
+import sys
 import pandas as pd
 import argparse
 import colorama
@@ -8,6 +9,10 @@ from last_command import save_last_command_to_json
 from autofill import FileCompleter
 
 colorama.init()
+
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
 
 def long_format(workdir, table_file, output_file, test_mode):
 
@@ -26,6 +31,24 @@ def long_format(workdir, table_file, output_file, test_mode):
                 # beolovasás                    
                 table = pd.read_csv(str(table_path), sep= sep, decimal = dec, engine='python')
 
+                # Check that column types are not mixed
+                for k in table.columns:
+                    series = table[k]
+                    if series.empty or series.isna().all():
+                        myMethods.list_available_columns(str(table_path), sep)
+                        myMethods.type_print(f"Column '{k}' is empty!", color=colorama.Fore.RED)
+                        sys.exit(1)
+                    
+                    if myMethods.has_mixed_column2(series):
+                        myMethods.list_available_columns(str(table_path), sep)
+                        myMethods.type_print(f"Column '{k}' has mixed data types, please use consistent columns!", color= colorama.Fore.RED)
+                        sys.exit(1)
+
+                    if series.isna().any():  # check for missing
+                        myMethods.list_available_columns(str(table_path), sep)
+                        myMethods.type_print(f"Column '{k}' contains missing values!", color= colorama.Fore.RED)
+                        sys.exit(1)
+                
                 dangerous_column = [col for col in table.columns if myMethods.has_mixed_column2(table[col])]
 
                 if dangerous_column:
@@ -43,8 +66,8 @@ def long_format(workdir, table_file, output_file, test_mode):
                     myMethods.blue_message("table: ", table)
                     df_long_format = pd.melt(table, id_vars= id_vars)
 
-                # mentés
-                df_long_format.to_csv(str(output_path), index=False, sep= "\t", decimal= dec)
+                #save to csv
+                myMethods.safe_to_csv(table= df_long_format, output_path= output_path, separator= "\t", decimal= decimal)
 
                 myMethods.success_message(df_long_format, "long format", output_path, test_mode= test_mode)
                 break  
@@ -70,6 +93,8 @@ def long_format(workdir, table_file, output_file, test_mode):
                             completer= file_completer)
                         table_path = workdir / table_file                      
                         continue
+                
+                
 
 
             #--table hibakezelés

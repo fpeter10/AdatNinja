@@ -11,6 +11,10 @@ from autofill import HeaderCompleter, MultiHeaderCompleter, FileCompleter
 
 colorama.init()
 
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
+
 def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col, test_mode):
 
     # Path
@@ -55,8 +59,17 @@ def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col,
                     myMethods.list_available_columns(str(table_path), sep)
                     raise ValueError(f"Error [{col}] --id_col column not found!")
                 if pd.api.types.is_numeric_dtype(table[col]):
+                    myMethods.list_available_columns(str(table_path), sep)
                     raise ValueError(f"Error [{col}] --id_col column should not be numeric!")
                 
+                series = table[col]
+                if myMethods.has_mixed_column2(series):
+                        myMethods.list_available_columns(str(table_path), sep)
+                        raise ValueError(f"Column '{col}' has mixed data types, please use consistent columns!")
+                if series.isna().any():  # check for missing
+                        myMethods.list_available_columns(str(table_path), sep)
+                        raise ValueError(f"Column '{col}' contains missing Nan values!")
+
             # --value_col minden lehetséges hiba kiszűrése
             myMethods.check_everything_number(table= table, table_path= table_path, value_to_check= value_col, 
                                                   parameter= "value_col", sep= sep)                
@@ -65,13 +78,6 @@ def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col,
             myMethods.check_everything_string(table= table, table_path= table_path, value_to_check= sample_col, 
                                                   parameter= "sample_col", sep= sep, is_none_possible= False)
                     
-            
-            # Check sample_col
-            #myMethods.col_in_table(table= table, value_to_check = sample_col, parameter= "sample_col", table_path = table_path, sep = sep)
-                
-            # --sample_col nem lehet number
-            #myMethods.is_not_numeric_column(table= table, value_to_check = sample_col, parameter= "sample_col", table_path = table_path, sep = sep)
-            
             for col in id_col_list:
                 if col == sample_col:
                     myMethods.list_available_columns(str(table_path), sep)
@@ -94,8 +100,8 @@ def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col,
                     '_'.join([str(i) for i in col if i]) for col in df_wide.columns.values
                 ]
 
-            # Save output
-            df_wide.to_csv(str(output_path), index=False, sep="\t", decimal= ".")
+            #save to csv
+            myMethods.safe_to_csv(table= df_wide, output_path= output_path, separator= "\t", decimal= decimal)
 
             myMethods.success_message(df_wide, "wide_format", output_path, test_mode=test_mode)
             break
@@ -137,6 +143,22 @@ def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col,
                 id_col = [col.strip() for col in id_col.split() if col.strip()]
                 continue
             
+            # id_col Nan -t tartalmaz
+            elif "contains missing Nan values!" in str(e):
+                type_print("Enter correct id_cols: ", color = colorama.Fore.LIGHTCYAN_EX)
+                id_col = prompt("", completer=multi_header_completer).strip()
+                myMethods.check_exit(id_col)
+                id_col = [col.strip() for col in id_col.split() if col.strip()]
+                continue
+            
+            # id_col MIX
+            elif "has mixed data types, please use consistent columns!" in str(e):
+                type_print("Enter correct id_cols: ", color = colorama.Fore.LIGHTCYAN_EX)
+                id_col = prompt("", completer=multi_header_completer).strip()
+                myMethods.check_exit(id_col)
+                id_col = [col.strip() for col in id_col.split() if col.strip()]
+                continue
+            
             # id_col nem lehet duplikátum
             elif "duplicate columns in --id_col" in str(e):
                 type_print("Enter id_cols, the same --id_cols prohibited: ", color = colorama.Fore.LIGHTCYAN_EX)
@@ -149,6 +171,18 @@ def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col,
             elif '--value_col column not found!' in str(e):
                     value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
                             completer= header_completer)
+                    continue
+            
+            # teljes üres adatok --value_col
+            elif '--value_col is empty!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+            # üres értékek Nan --value_col
+            elif '--value_col contains Nan values!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
                     continue
 
             # --value nem szám   
@@ -169,6 +203,16 @@ def wide_format(workdir, table_file, output_file, value_col, sample_col, id_col,
                                         completer= header_completer)
                     continue
             
+            # --sample_col üres   
+            elif '--sample_col contains Nan values!' in str(e):
+                    sample_col = myMethods.error_handling(print_message= "Enter correct --sample_col column: ", 
+                                        completer= header_completer)
+                    continue
+            
+            elif '--sample_col has mixed data types, please use consistent columns!' in str(e): 
+                    sample_col = myMethods.error_handling(print_message= "Enter correct --sample_col column: ", 
+                                             completer= header_completer)
+                    continue
 
             # --sample_col nem szám   
             elif '--sample_col should not be numeric!' in str(e):

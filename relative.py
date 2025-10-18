@@ -8,9 +8,16 @@ from last_command import save_last_command_to_json
 from methods import type_print
 from autofill import HeaderCompleter, FileCompleter
 
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
 colorama.init()
 
-def relativize_columns(workdir, table_file, output_file, group_col, sum_value, test_mode):
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
+
+def relativize_columns(workdir, table_file, output_file, group_col, value_col, sum_value, test_mode):
 
     # Path
     workdir = Path(workdir)
@@ -37,7 +44,11 @@ def relativize_columns(workdir, table_file, output_file, group_col, sum_value, t
                 # --group_col minden lehetséges hiba kiszűrése
                 myMethods.check_everything_string(table= table, table_path= table_path, value_to_check= group_col, 
                                                   parameter= "group_col", sep= sep, is_none_possible= True)
-       
+                
+                # --value_col minden lehetséges hiba kiszűrése
+                myMethods.check_everything_number(table= table, table_path= table_path, value_to_check= value_col, 
+                                                  parameter= "value_col", sep= sep) 
+                
                 # sum szám legyen
                 try:
                     float(sum_value)
@@ -66,7 +77,7 @@ def relativize_columns(workdir, table_file, output_file, group_col, sum_value, t
                 myMethods.blue_message("table: ", table)
             
                     # Perform statistics
-                df_relative = myMethods.def_relative_columns(df= table, groupby_cols= group_col, sum_value = sum_value)
+                df_relative = myMethods.def_relative_columns(df= table, groupby_cols= group_col, sum_value = sum_value, table_path= table_path, sep= sep, value_col= value_col)
                     
                     # Save merged DataFrame
                 df_relative.to_csv(str(output_path), index=False, sep= "\t",  decimal = ".")
@@ -94,6 +105,42 @@ def relativize_columns(workdir, table_file, output_file, group_col, sum_value, t
                     table_path = workdir / table_file                    
                     continue
 
+                # --value_col hibakezelés
+                if '--value_col column not found!' in str(e):
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer)
+                    continue
+                
+                # üres adatok --value_col
+                elif '--value_col is empty!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # üres értékek Nan --value_col
+                elif '--value_col contains Nan values!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # ha --value_col MIX típus
+                elif 'should be numeric!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # üres értékek Nan --value_col
+                elif '--value_col contains Nan values!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                 # --value_col nem szám hibakezelés
+                elif '--value_col should be numeric!' in str(e):
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer)
+                    continue
+
                 
                 elif 'as --sum_value is not numeric!' in str(e):  
                     sum_value = myMethods.error_handling(print_message= "Enter correct --sum_value: ", 
@@ -106,7 +153,25 @@ def relativize_columns(workdir, table_file, output_file, group_col, sum_value, t
                     group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
                                              completer= header_completer)
                     continue
+                
 
+                # üres --group_col
+                elif '--group_col is empty!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # üres adatok Nan --group_col
+                elif '--group_col contains Nan values!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                elif '--group_col has mixed data types, please use consistent columns!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer)
+                    continue
+                
                 # --group_col szám hibakezelés
                 elif '--group_col should not be numeric!' in str(e): 
                     type_print(f"If you do not need --group_col type none!")
@@ -132,7 +197,7 @@ def relativize_columns(workdir, table_file, output_file, group_col, sum_value, t
             except myMethods.ExitProgram:
                 raise SystemExit(0)             
 
-    return workdir, table_file, output_file, group_col, sum_value
+    return workdir, table_file, output_file, group_col, value_col, sum_value
 
 def parse_stat():
     parser = argparse.ArgumentParser(description="Calculate the relative values, in a group with the sum of --sum_value",
@@ -141,6 +206,7 @@ def parse_stat():
     parser.add_argument("--table", required=True, help= myMethods.help_table)
     parser.add_argument("--output", required=True, help= myMethods.help_output(default_output= "relative"))
     parser.add_argument("--group_col", help= myMethods.help_group(default_group= "group"))
+    parser.add_argument("--value_col", help= "")
     parser.add_argument("--sum_value", help="Sum of the values in one group, e.g.: 1, 100")
 
     args = parser.parse_args()
@@ -160,6 +226,7 @@ if __name__ == "__main__":
     table = args.table if args.table else ""
     output = args.output if args.output else ""
     group_col = args.group_col if args.group_col else "None"
+    value_col = args.value_col if args.value_col else ""
     sum_value = args.sum_value if args.sum_value else 1
 
     test_mode = False
@@ -167,10 +234,10 @@ if __name__ == "__main__":
     # számítás és hiba kezelés
     while True:
         try:
-            workdir_save, table_save, output_file_save, group_col_save, sum_value_save = relativize_columns(workdir, table, output, group_col, sum_value, test_mode)
+            workdir_save, table_save, output_file_save, group_col_save, value_col_save, sum_value_save = relativize_columns(workdir, table, output, group_col, value_col, sum_value, test_mode)
             break
         except myMethods.BackToMainMenu:
-            workdir_save = table_save = output_file_save = sum_value_save  = group_col_save = None
+            workdir_save = table_save = output_file_save = sum_value_save  = group_col_save = value_col_save = None
             break  # loop back to menu
         
         except myMethods.ExitProgram:
@@ -179,6 +246,7 @@ if __name__ == "__main__":
     args.workdir = workdir_save
     args.table = table_save
     args.output = output_file_save
+    args.value_col = value_col_save
     args.sum_value = sum_value_save
 
     if group_col not in ["none", "NONE", "None"]: 
@@ -190,7 +258,7 @@ if __name__ == "__main__":
         args.group_col = "none"
 
     # mentés json fileba
-    cmd = f"python relative.py --workdir {args.workdir} --table {args.table} --output {args.output} --group_col {str(args.group_col)} --sum_value {args.sum_value}"
+    cmd = f"python relative.py --workdir {args.workdir} --table {args.table} --output {args.output} --group_col {str(args.group_col)} --value_col {args.value_col} --sum_value {args.sum_value}"
     save_last_command_to_json(cmd)
 
 

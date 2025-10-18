@@ -11,15 +11,11 @@ from prompt_toolkit.completion import WordCompleter
 from autofill import HeaderCompleter, MultiHeaderCompleter, FileCompleter
 import autofill as autofill
 
-update_table = None
-update_output = None
-update_column_to_split = None
-update_separator = None
-update_new_columns = None
-
 colorama.init()
 
-
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
 
 separator_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
 
@@ -107,6 +103,10 @@ def split_column_names(workdir, table_file, output_file, column_to_split, separa
 
             table_split.to_csv(str(output_path), index=False, sep= "\t", decimal= dec)
 
+            #save to csv
+            myMethods.safe_to_csv(table= table_split, output_path= output_path, separator= "\t", decimal= decimal)
+
+
             myMethods.success_message(table_split, "split", output_path, test_mode= test_mode)
             break  
 
@@ -144,12 +144,23 @@ def split_column_names(workdir, table_file, output_file, column_to_split, separa
             elif '--column_to_split is empty!' in str(e): 
                 column_to_split = myMethods.error_handling(print_message= "Enter correct --column_to_split column: ", 
                                 completer= header_completer) 
+                
+            # üres értékek Nan --column_to_split
+            elif '--column_to_split contains Nan values!' in str(e): 
+                column_to_split = myMethods.error_handling(print_message= "Enter correct --ncolumn_to_splitame_col column: ", 
+                                             completer= header_completer) 
+                continue
                     
 
             # --column_to_split szám hibakezelés
             elif '--column_to_split should not be numeric!' in str(e): 
                 column_to_split = myMethods.error_handling(print_message= "Enter correct --column_to_split column: ", 
                             completer= header_completer)                    
+                continue
+            
+            elif '--column_to_split has mixed data types, please use consistent columns!' in str(e): 
+                column_to_split = myMethods.error_handling(print_message= "Enter correct --column_to_split column: ", 
+                                        completer= header_completer)
                 continue
             
             elif 'can not split!' in str(e): 
@@ -237,12 +248,12 @@ if __name__ == "__main__":
         args.output = f"{table_base}_split_column"
 
     # alapértelmezett név
-    workdir = args.workdir or ""
-    table = args.table or ""
-    output = args.output or ""
-    column_to_split = args.column_to_split or ""
-    separator = args.separator or "_"
-    new_columns = args.new_columns or ""
+    workdir = args.workdir if args.workdir else ""
+    table = args.table if args.table else ""
+    output = args.output if args.output else ""
+    column_to_split = args.column_to_split if args.column_to_split else ""
+    separator = args.separator if args.separator else "_"
+    new_columns = args.new_columns if args.new_columns else ""
     
     # ensure merge_cols is a list
     if isinstance(new_columns, str):

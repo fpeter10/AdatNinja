@@ -10,6 +10,10 @@ from autofill import HeaderCompleter, FileCompleter, WordCompleter
 
 colorama.init()
 
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
+
 join_type_completer = WordCompleter(autofill.merge_mode_autofill, ignore_case=True)
 
 def mergeAny(workdir, table1, table2, output_file, tab_id1, tab_id2, mode, test_mode):
@@ -100,8 +104,8 @@ def mergeAny(workdir, table1, table2, output_file, tab_id1, tab_id2, mode, test_
                             completer= header_completer2)                    
                         continue
 
-                # mentés
-                df_merge.to_csv(str(output_path), index=False, sep= "\t", decimal= ".")
+                #save to csv
+                myMethods.safe_to_csv(table= df_merge, output_path= output_path, separator= "\t", decimal= decimal)
 
                 myMethods.success_message(df_merge, "merge", output_path, test_mode= test_mode)
                 break  
@@ -152,6 +156,18 @@ def mergeAny(workdir, table1, table2, output_file, tab_id1, tab_id2, mode, test_
                 elif '--tab_id1 is empty!' in str(e): 
                     tab_id1 = myMethods.error_handling(print_message= "Enter correct --tab_id1 column: ", 
                                              completer= header_completer1) 
+                    continue
+                    
+                # üres adatok Nan --tab_id1
+                elif '--tab_id1 contains Nan values!' in str(e): 
+                    tab_id1 = myMethods.error_handling(print_message= "Enter correct --tab_id1 column: ", 
+                                             completer= header_completer1) 
+                    continue
+                
+                elif '--tab_id1 has mixed data types, please use consistent columns!' in str(e): 
+                    tab_id1 = myMethods.error_handling(print_message= "Enter correct --tab_id1 column: ", 
+                                             completer= header_completer1)
+                    continue
                     
                 # --tab_id1 szám hibakezelés
                 elif '--tab_id1 should not be numeric!' in str(e): 
@@ -169,6 +185,18 @@ def mergeAny(workdir, table1, table2, output_file, tab_id1, tab_id2, mode, test_
                 elif '--tab_id2 is empty!' in str(e): 
                     tab_id2 = myMethods.error_handling(print_message= "Enter correct --tab_id2 column: ", 
                                              completer= header_completer2) 
+                    continue
+                    
+                # üres adatok Nan --tab_id2
+                elif '--tab_id2 contains Nan values!' in str(e): 
+                    tab_id2 = myMethods.error_handling(print_message= "Enter correct --tab_id2 column: ", 
+                                             completer= header_completer2) 
+                    continue
+                
+                elif '--tab_id2 has mixed data types, please use consistent columns!' in str(e): 
+                    tab_id2 = myMethods.error_handling(print_message= "Enter correct --tab_id2 column: ", 
+                                             completer= header_completer2)
+                    continue
                     
                 # --tab_id2 szám hibakezelés
                 elif '--tab_id2 should not be numeric!' in str(e): 

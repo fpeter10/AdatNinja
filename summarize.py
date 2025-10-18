@@ -11,6 +11,10 @@ import autofill as autofill
 
 colorama.init()
 
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
+
 summary_mode_completer = WordCompleter(autofill.summary_mode_autofill, ignore_case=True)
 
 def calculate_summary(workdir, table_file, output_file, name_col, value_col, group_col, summary_mode, test_mode):
@@ -64,8 +68,8 @@ def calculate_summary(workdir, table_file, output_file, name_col, value_col, gro
                 # számolás
                 df_summary = myMethods.def_calculate_summarize(table, name_col, group_col, value_col, summarize_mode= summary_mode)
 
-                # mentés
-                df_summary.to_csv(str(output_path), index=False, sep= "\t", decimal= ".")
+                #save to csv
+                myMethods.safe_to_csv(table= df_summary, output_path= output_path, separator= "\t", decimal= decimal)
 
                 myMethods.success_message(df_summary, "summary", output_path, test_mode= test_mode)
                 break  
@@ -103,8 +107,19 @@ def calculate_summary(workdir, table_file, output_file, name_col, value_col, gro
                     name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
                                              completer= header_completer) 
                     
+                # üres értékek Nan --name_col
+                elif '--name_col contains Nan values!' in str(e): 
+                    name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
                 # --name_col szám hibakezelés
                 elif '--name_col should not be numeric!' in str(e): 
+                    name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
+                                             completer= header_completer)
+                    continue
+                
+                elif '--name_col has mixed data types, please use consistent columns!' in str(e): 
                     name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
                                              completer= header_completer)
                     continue
@@ -117,6 +132,12 @@ def calculate_summary(workdir, table_file, output_file, name_col, value_col, gro
                 
                 # üres --value_col
                 elif '--value_col is empty!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # üres értékek Nan --value_col
+                elif '--value_col contains Nan values!' in str(e): 
                     value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
                                              completer= header_completer) 
                     continue
@@ -139,8 +160,20 @@ def calculate_summary(workdir, table_file, output_file, name_col, value_col, gro
                                              completer= header_completer) 
                     continue
                 
+                # üres adatok Nan --group_col
+                elif '--group_col contains Nan values!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                
                  # --group_col number hibakezelés
                 elif '--group_col should not be numeric!' in str(e):
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer)
+                    continue
+                
+                elif '--group_col has mixed data types, please use consistent columns!' in str(e): 
                     group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
                                              completer= header_completer)
                     continue

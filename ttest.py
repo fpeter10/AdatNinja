@@ -10,6 +10,10 @@ from autofill import HeaderCompleter, FileCompleter
 
 colorama.init()
 
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
+
 def calculate_t_test(workdir, table_file, output_file, name_col, value_col, group_col, test_mode):
 
     # Path
@@ -35,26 +39,19 @@ def calculate_t_test(workdir, table_file, output_file, name_col, value_col, grou
 
                 header_completer = HeaderCompleter(headers)
 
-                # --name_col értéke ha none vagyis nem kell csoport
-                myMethods.none_parameter(table= table, value_to_check= name_col)
-
-                # ha nincs --name_col
-                myMethods.col_in_table(table= table, value_to_check = name_col, parameter= "name_col", table_path = table_path, sep = sep)
+                # --name_col minden lehetséges hiba kiszűrése
+                myMethods.check_everything_string(table= table, table_path= table_path, value_to_check= name_col, 
+                                                  parameter= "name_col", sep= sep, is_none_possible= True)
                 
-                # ha szám a --name_col
-                myMethods.is_not_numeric_column(table= table, value_to_check = name_col, parameter= "name_col", table_path = table_path, sep = sep)
+                # --value_col minden lehetséges hiba kiszűrése
+                myMethods.check_everything_number(table= table, table_path= table_path, value_to_check= value_col, 
+                                                  parameter= "value_col", sep= sep)                
+           
 
-                # nincs --value_col
-                myMethods.col_in_table(table= table, value_to_check = value_col, parameter= "value_col", table_path = table_path, sep = sep)
-
-                # --value_col csak szám lehet
-                myMethods.is_numeric_column(table= table, value_to_check = value_col, parameter= "value_col", table_path = table_path, sep = sep)
+                # --group_col minden lehetséges hiba kiszűrése
+                myMethods.check_everything_string(table= table, table_path= table_path, value_to_check= group_col, 
+                                                  parameter= "group_col", sep= sep, is_none_possible= True)
                 
-                # invalid --group_col
-                myMethods.col_in_table(table= table, value_to_check = group_col, parameter= "group_col", table_path = table_path, sep = sep)
-                
-                # --group_col nem lehet number
-                myMethods.is_not_numeric_column(table= table, value_to_check = group_col, parameter= "group_col", table_path = table_path, sep = sep)
 
                 # Nem lehet egyforma a --name és --group
                 if group_col == name_col:
@@ -66,8 +63,8 @@ def calculate_t_test(workdir, table_file, output_file, name_col, value_col, grou
                 # számolás
                 df_test = myMethods.def_calculate_t_test(table, name_col, group_col, value_col)
 
-                # mentés
-                df_test.to_csv(str(output_path), index=False, sep= "\t", decimal= ".")
+                #save to csv
+                myMethods.safe_to_csv(table= df_test, output_path= output_path, separator= "\t", decimal= decimal)
 
                 myMethods.success_message(df_test, "t_test", output_path, test_mode= test_mode)
                 break  
@@ -99,6 +96,18 @@ def calculate_t_test(workdir, table_file, output_file, name_col, value_col, grou
                     name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
                             completer= header_completer)
                     continue
+                
+                # üres --name_col
+                elif '--name_col is empty!' in str(e): 
+                    name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # üres értékek Nan --name_col
+                elif '--name_col contains Nan values!' in str(e): 
+                    name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
+                                             completer= header_completer) 
+                    continue
 
                 # --name_col szám hibakezelés
                 elif '--name_col should not be numeric!' in str(e): 
@@ -106,11 +115,22 @@ def calculate_t_test(workdir, table_file, output_file, name_col, value_col, grou
                     name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
                             completer= header_completer)
                     continue
+                
+                elif '--name_col has mixed data types, please use consistent columns!' in str(e): 
+                    name_col = myMethods.error_handling(print_message= "Enter correct --name_col column: ", 
+                                             completer= header_completer)
+                    continue
 
                 # --value_col hibakezelés
                 elif 'as --value_col column not found!' in str(e):
                     value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
                             completer= header_completer)
+                    continue
+                
+                # üres adatok Nan --value_col
+                elif '--value_col is empty!' in str(e): 
+                    value_col = myMethods.error_handling(print_message= "Enter correct --value_col column: ", 
+                                             completer= header_completer) 
                     continue
                 
                  # --value_col nem szám hibakezelés
@@ -125,13 +145,30 @@ def calculate_t_test(workdir, table_file, output_file, name_col, value_col, grou
                     group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
                             completer= header_completer)
                     continue
+                
+                # üres --group_col
+                elif '--group_col is empty!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                # üres adatok Nan --group_col
+                elif '--group_col contains Nan values!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer) 
+                    continue
+                
+                elif '--group_col has mixed data types, please use consistent columns!' in str(e): 
+                    group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
+                                             completer= header_completer)
+                    continue
 
                 # --group_col szám hibakezelés
                 elif '--group_col should not be numeric!' in str(e):
                     type_print(f"If you do not need --group_col type none!")
                     group_col = myMethods.error_handling(print_message= "Enter correct --group_col column: ", 
                                              completer= header_completer)
-                    continue                
+                    continue 
 
                 # ugyanaz --name_col --group_col hiba
                 elif 'are the same, please modify --name_col and --group_col' in str(e):

@@ -14,6 +14,10 @@ import autofill as autofill
 
 colorama.init()
 
+settings = myMethods.get_local_settings()
+language = settings["language"]
+decimal = settings["decimal"]
+
 separator_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
 
 
@@ -40,16 +44,21 @@ def merge_categories(workdir, table_file, output_file, merge_cols, new_column, s
             multi_header_completer = MultiHeaderCompleter(headers)
             header_completer = HeaderCompleter(headers)
             
-            
-
             if not (2 <= len(merge_cols) <= 5):
                 raise ValueError(f"Error: You must provide between 2 and 5 columns to merge.")
-
 
             # Validate all specified merge columns exist
             for col in merge_cols:
                 if col not in table.columns:
                     raise ValueError(f"Error: Column '{col}' not found in table.")
+                
+                 # Check if the column has no data at all (all NaN)
+                if table[col].isna().all():
+                    raise ValueError(f"Error: Column '{col}' is completely empty!")
+                    
+                # Check if the column contains *any* missing values
+                if table[col].isna().any():
+                    raise ValueError(f"Error: Column '{col}' contains NaN values!")
                 
             # Validate new column not exist
             for col in table.columns:
@@ -66,7 +75,8 @@ def merge_categories(workdir, table_file, output_file, merge_cols, new_column, s
             # Merge selected columns into one
             table[new_column] = table[merge_cols].astype(str).agg(separator.join, axis=1)
 
-            table.to_csv(output_path, index=False, sep="\t")
+            #save to csv
+            myMethods.safe_to_csv(table= table, output_path= output_path, separator= "\t", decimal= decimal)
 
             myMethods.success_message(table, "merged categories", output_path, test_mode)
             break
@@ -106,6 +116,19 @@ def merge_categories(workdir, table_file, output_file, merge_cols, new_column, s
                 if not (2 <= len(merge_cols) <= 5):
                     type_print("Still invalid: you must provide between 2 and 5 columns.")
                     continue
+                
+            
+            elif "is completely empty!" in str(e):
+                merge_cols = prompt("Enter 2–5 column names: ", completer=multi_header_completer).strip()
+                myMethods.check_exit(merge_cols)
+                merge_cols = [col.strip() for col in merge_cols.split() if col.strip()]
+                continue
+
+            elif "contains NaN values!" in str(e):
+                merge_cols = prompt("Enter 2–5 column names: ", completer=multi_header_completer).strip()
+                myMethods.check_exit(merge_cols)
+                merge_cols = [col.strip() for col in merge_cols.split() if col.strip()]
+                continue
                 
             # new column
             elif "is already exist, can not be new column" in str(e):
@@ -186,7 +209,7 @@ if __name__ == "__main__":
             break
         
         except myMethods.BackToMainMenu:
-            workdir_save = table_save = output_file_save = merge_cols_save, new_column_save, separator_save = (None,) * 2
+            workdir_save = table_save = output_file_save = merge_cols_save, new_column_save, separator_save = (None,) * 3
             break  # loop back to menu
         
         except myMethods.ExitProgram:

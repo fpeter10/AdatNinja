@@ -121,6 +121,10 @@ chat_prog = {
         "description": "Print program usage stat"
     },
 
+    "language": {
+        "description": "Change language settings that effects decimal separator"
+    },
+
     "exit": {
         "description": "Exit the program"
     },
@@ -166,21 +170,21 @@ programs = {
         "params": ["--table", "--output", "--name_col", "--value_col", "--group_col", "--summary_mode"]
     },
 
-    "print_table":{
+    "print table":{
        "code": "print_table.py",
        "name": "print table",
        "description" : "Print table",
        "params": ["--table"]
     },
-    "long_format":{
+    "long format":{
         "code": "long_format.py",
         "name": "long format",
         "description" : "Transpose to long format",
         "params": ["--table", "--output"]
     },
-    "wide_format":{
+    "wide format":{
         "code": "wide_format.py",
-        "name": "wide_format",
+        "name": "wide format",
         "description": "Transpose to wide format",
         "params": ["--table", "--output", "--id_col", "--value_col", "--sample_col"]
     },
@@ -196,15 +200,15 @@ programs = {
         "description": "Calculate relative values",
         "params": ["--table", "--output", "--group_col", "--sum_value"]
     },
-    "merge_columns":{
+    "merge columns":{
         "code": "merge_columns.py",
-        "name": "merge_columns",
+        "name": "merge columns",
         "description": "Merge 2-5 columns into one",
         "params": ["--table", "--output", "--merge_cols", "--new_column", "--separator"]
     },
-    "split_columns":{
+    "split columns":{
         "code": "split_column.py",
-        "name": "split_columns",
+        "name": "split columns",
         "description": "Split a complex column into single ones",
         "params": ["--table", "--output", "--column_to_split", "--separator", "--new_columns"]
     },
@@ -214,6 +218,13 @@ programs = {
         "name": "change sep",
         "description": "Change the separator and decimal",
         "params": ["--table", "--output", "--sep", "--dec"]
+    }, 
+
+    "sort table": {
+        "code": "sort_table.py",
+        "name": "sort table",
+        "description": "Sort table data according to multiple column in order",
+        "params": ["--table", "--output", "--keys", "--sort_mode"]
     }
 
 }
@@ -329,15 +340,14 @@ def build_command(program_key, working_dir):
             check_exit(value)
             cmd.extend([param, value])
 
-        new_separator_completer = WordCompleter(autofill.new_separator_autofill, ignore_case=True)
-        new_decimal_completer = WordCompleter(autofill.new_decimal_autofill, ignore_case=True)
-
         if param in ["--sep"]:
+            new_separator_completer = WordCompleter(autofill.new_separator_autofill, ignore_case=True)
             value = prompt("", completer= new_separator_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
 
         if param in ["--dec"]:
+            new_decimal_completer = WordCompleter(autofill.new_decimal_autofill, ignore_case=True)
             value = prompt("", completer= new_decimal_completer).strip()
             check_exit(value)
             cmd.extend([param, value])
@@ -360,7 +370,7 @@ def build_command(program_key, working_dir):
             check_exit(value)
             cmd.extend([param, value])
 
-        if param in ["--merge_cols", "--id_col", "--new_columns"]:            
+        if param in ["--merge_cols", "--id_col", "--new_columns", "--keys"]:            
             multi_header_completer = MultiHeaderCompleter(headers)
             value = prompt("", completer=multi_header_completer).strip()
             check_exit(value)
@@ -375,16 +385,23 @@ def build_command(program_key, working_dir):
             cmd.extend([param, value])
 
         if param in ["--separator"]:
-            sum_value_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
-            value = prompt("", completer=sum_value_completer).strip()
+            separator_completer = WordCompleter(autofill.separator_autofill, ignore_case=True)
+            value = prompt("", completer=separator_completer).strip()
+            check_exit(value)
+
+        if param in ["--sort_mode"]:
+            sort_mode_completer = WordCompleter(autofill.sort_mode_autofill, ignore_case=True)
+            value = prompt("", completer=sort_mode_completer).strip()
             check_exit(value)
             
             cmd.extend([param, value])
+
+        
             
   
         if param not in ["--name_col", "--group_col", "--value_col", "--output", "--table",
                          "--tab_id1", "--tab_id2", "--table1", "--table2", "--mode", "--summary_mode",
-                         "--id_col", "--sample_col", "--sum_value", "--merge_cols", 
+                         "--id_col", "--sample_col", "--sum_value", "--merge_cols", "--keys", "--sort_mode",
                          "--column_to_split", "--new_columns", "--new_column", "--separator", "--sep", "--dec"]:
             value = input(f"").strip()
             cmd.extend([param, value])
@@ -431,10 +448,10 @@ def main():
                 type_print(f"Working directory: {workdirectory}")
 
             if command == "info":
-                
                 tracker.get_program_info()
 
-        
+            if command == "language":
+                myMethods.save_language(force= True)
     
             if command.startswith("load code"):
                 try:    

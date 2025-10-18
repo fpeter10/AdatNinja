@@ -54,8 +54,8 @@ def change_sep(workdir, table_file, output_file, separator, dececimal, test_mode
                 if not myMethods.validate_dec(dececimal):
                     raise ValueError(f"Invalid decimal separator {dececimal}, choose from: colon, point")
 
-                # mentés
-                table.to_csv(str(output_path), index=False, sep= separator, decimal= dececimal)
+                #save to csv
+                myMethods.safe_to_csv(table= table, output_path= output_path, separator= "\t", decimal= dececimal)
 
                 myMethods.success_message(table, "changed sep", output_path, test_mode= test_mode)
                 break  

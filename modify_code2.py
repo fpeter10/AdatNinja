@@ -16,7 +16,7 @@ def modify_parameters(command):
         "--workdir", "--table", "--table1", "--table2", "--output",
         "--name_col", "--group_col", "--new_column", "--value_col", "--tab_id1", "--tab_id2",
         "--mode", "--summary_mode", "--id_col", "--sample_col", "--sum_value", "--merge_cols",
-        "--column_to_split", "--sep", "--dec", "--separator", "--new_columns"
+        "--column_to_split", "--sep", "--dec", "--separator", "--new_columns", "--keys", "--sort_mode"
     ]
 
     working_dir = ""
@@ -121,7 +121,7 @@ def modify_parameters(command):
                 i = next_idx
                 break
 
-        elif tok in ["--id_col", "--new_columns"]:
+        elif tok in ["--id_col", "--new_columns", "--keys"]:
             current_cols = current_values
             header_compl = MultiHeaderCompleter(headers)
             while True:
@@ -221,7 +221,20 @@ def modify_parameters(command):
             if not new_value:
                 new_value = current_values[0] if current_values else ""
             tokens[i+1:j] = [new_value]
-            i += 2    
+            i += 2   
+
+        elif tok == "--sort_mode":
+            mode_options = autofill.sort_mode_autofill
+            sum_compl = WordCompleter(mode_options, ignore_case=True)
+            new_value = prompt(
+                f"Current value for {tok} is '{' '.join(current_values)}'. choose from: [decreasing], [increasing] or press Enter to keep: ",
+                completer=sum_compl
+            ).strip()
+            check_exit(new_value)
+            if not new_value:
+                new_value = current_values[0] if current_values else ""
+            tokens[i+1:j] = [new_value]
+            i += 2     
 
         # ---- Fallback for other params ----
         else:

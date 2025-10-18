@@ -14,7 +14,8 @@ from prompt_toolkit import prompt
 from scipy.stats import mannwhitneyu
 from scipy.stats import ttest_ind
 from scipy.stats import shapiro
-
+from prompt_toolkit.completion import WordCompleter
+import autofill as autofill
 
 def type_print(text, test_mode = False, color=colorama.Fore.WHITE, base_speed=0.01):
     if test_mode == True:
@@ -24,9 +25,6 @@ def type_print(text, test_mode = False, color=colorama.Fore.WHITE, base_speed=0.
         for char in line:
             sys.stdout.write(f"{color}{char}{colorama.Style.RESET_ALL}")
             sys.stdout.flush()
-            #if char in {'.', ',', ':', ';', '!', '?'}:
-            #    time.sleep(base_speed * 4)
-            #else:
             time.sleep(base_speed + random.uniform(0, base_speed * 5))
         print()
 
@@ -56,6 +54,37 @@ def get_user_name(filename="user.txt"):
     with open(filename, "w") as file:
         file.write(name)
     return name
+
+language_autofill = WordCompleter(autofill.language_autofill, ignore_case=True)
+
+def save_language(filename="language.txt", force = False):
+    valid_languages = {"English", "Magyar"}
+
+    if not force:
+        # Try reading existing language file
+        try:
+            with open(filename, "r", encoding="utf-8") as file:
+                language = file.read().strip().capitalize()
+                if language in valid_languages.values():
+                    return language
+        except FileNotFoundError:
+            pass  # No file yet, proceed to prompt user
+        
+    type_print(f"Choose between English or Magyar settings. "\
+                   "This will affect formatting options: decimal separator (comma vs. point).", color= colorama.Fore.CYAN)
+        
+    while True:
+        language_input = prompt("Language: ", completer=language_autofill).strip()
+        check_exit(language_input)
+
+        if language_input in valid_languages:
+            with open(filename, "w", encoding="utf-8") as file:
+                file.write(language_input)
+            type_print(f"Language set to: {language_input}")
+            return language_input
+        else:
+            type_print("Invalid input. Please type 'English' or 'Magyar'.", color= colorama.Fore.RED)
+            print(colorama.Style.RESET_ALL)
 
 
 def list_functions():
@@ -206,24 +235,6 @@ def detect_separator_issue(file_path, expected_separator):
         return True  # Assume issue if file can't be read
 
 
-# def table_has_data(table_file, separator):
-#     if os.path.getsize(table_file) <= 3: # if it is full 0
-#         return False
-
-#     # Try reading the file. If it's completely empty, pandas will raise EmptyDataError.
-#     try:
-#         df = pd.read_csv(table_file, sep=separator, engine='python')
-#     except EmptyDataError:
-#         return False
-
-#     # Optionally, you may want to consider a file with only a header row as "empty".
-#     if df.empty or len(df) <= 1:
-#         return False
-#     else:
-#         return True
-
-
-
 def table_has_data(table_file):
     if not os.path.exists(table_file) or os.path.getsize(table_file) <= 3:
         return False
@@ -273,18 +284,6 @@ def check_numeric_columns(table_file, separator, name_col, group_col, value_col,
     else:
         return False
     
-# def has_mixed_column(df):
-#     for column in df.columns:
-#         # Try to convert each value in the column to numeric, while handling errors
-#         is_numeric = pd.to_numeric(df[column], errors='coerce').notna()
-#         is_string = df[column].apply(lambda x: isinstance(x, str))
-
-#         # Check if the column contains both numeric and string data
-#         if is_numeric.any() and is_string.any():
-#             return True, column
-    
-#     # If no mixed column is found, return False and None
-#     return False, None
 
 def has_mixed_column(series):
     numeric_converted = pd.to_numeric(series, errors='coerce')
@@ -292,13 +291,31 @@ def has_mixed_column(series):
     has_strings = numeric_converted.isna().any()
     return has_numeric and has_strings
 
+
 def has_mixed_column2(series):
-    numeric_converted = pd.to_numeric(series, errors='coerce')
-    has_numeric = numeric_converted.notna().any()
-    has_strings = numeric_converted.isna().any()
-    return has_numeric and has_strings
+    """
+    Returns True if a column contains both numeric and non-numeric values.
+    Ignores missing values (NaN, None).
+    """
+    s = series.dropna()  # ignore missing
+    numeric_mask = pd.to_numeric(s, errors='coerce').notna()
+    non_numeric_mask = ~numeric_mask
+
+    return numeric_mask.any() and non_numeric_mask.any()
 
 
+def has_nan_values(series):
+    """
+    Returns True if the column contains missing values.
+    Missing values include: NaN, None, empty strings, or whitespace-only strings.
+    """
+    s = series.copy()
+    
+    # Treat empty strings or whitespace as missing
+    s = s.replace(r'^\s*$', pd.NA, regex=True)
+    
+    # Check if any missing values exist
+    return s.isna().any()
 
 
 def def_calculate_statistics(df, name_col, group_col, value_col):
@@ -453,79 +470,107 @@ def def_calculate_t_test(df, name_col, group_col, value_col):
     return pd.DataFrame(results_list)
 
 
-# def def_normalize_columns(input_file, sep, sum_value, groupby_cols=None):
-#     """
-#     Normalizes numeric columns in a CSV file globally or within groups,
-#     while preserving non-numeric columns.
+def def_sort_table_by_keys(table, sort_mode, keys=None):
+    """
+    Sort a pandas DataFrame by one or more columns.
+    """
 
-#     Parameters:
-#         input_file (str): Path to the CSV file.
-#         sep (str): Separator used in the CSV file.
-#         groupby_cols (list or None): List of column names to group by for local normalization.
-#                                      If None, normalization is done globally.
+    # Normalize sort_mode
+    if isinstance(sort_mode, str):
+        sort_mode = sort_mode.strip().lower()
+        if sort_mode in ["decreasing"]:
+            sort_mode = True
+        elif sort_mode in ["increasing"]:
+            sort_mode = False
+        
 
-#     Returns:
-#         pd.DataFrame: DataFrame with normalized numeric columns.
-#     """
-#     # Read the input file
-#     df = pd.read_csv(input_file, sep=sep, engine='python')
+    # Ensure keys is a list
+    if isinstance(keys, str):
+        keys = [keys]
+    elif not isinstance(keys, list):
+        raise ValueError("keys must be a string or list of column names.")
+
+    ordered = table.sort_values(by=keys, ascending=not sort_mode)
+
+    return ordered
+
+
+
+
+# def def_relative_columns(df, sum_value, table_path, sep, groupby_cols=None):
+    
+#     # Ha string és 'none', akkor None-ra alakítjuk
+#     if isinstance(groupby_cols, str) and groupby_cols.lower() == "none":
+#         groupby_cols = None
+
+#     # Ha string, de nem "none", akkor listává alakítjuk
+#     if isinstance(groupby_cols, str) and groupby_cols.lower() != "none":
+#         groupby_cols = [groupby_cols]
 
 #     # Identify numeric columns
 #     numeric_columns = df.select_dtypes(include=[np.number]).columns
 
-#     # If groupby_cols is not provided, normalize globally
+#     check_everything_number(table= df, table_path= table_path, value_to_check= numeric_columns, 
+#                                                   parameter= "numeric_col", sep= sep)
+
+#     # Globális normalizáció
 #     if groupby_cols is None:
 #         normalized_df = df.copy()
 #         for column in numeric_columns:
 #             total = df[column].sum()
-#             normalized_df[column] = df[column] / total * float(sum_value)
-#         return normalized_df
-
-#     # Else, normalize within each group
-#     else:
-#         def normalize_group(group):
-#             for column in numeric_columns:
-#                 total = group[column].sum()
-#                 group[column] = group[column] / total if total != 0 else group[column]
-#                 group[column] = group[column] * float(sum_value)
-#             return group
-
-#         normalized_df = df.groupby(groupby_cols, group_keys=False).apply(normalize_group)
+#             normalized_df[column] = (df[column] / total) * float(sum_value) if total != 0 else df[column]
 #         return normalized_df
 
 
+#     # Csoportosított normalizáció
+#     def normalize_group(group):
+#         for column in numeric_columns:
+#             total = group[column].sum()
+#             group[column] = (group[column] / total) * float(sum_value) if total != 0 else group[column]
+#         return group
 
-def def_relative_columns(df, sum_value, groupby_cols=None):
+#     normalized_df = df.groupby(groupby_cols, group_keys=False).apply(normalize_group)
+#     return normalized_df
+
+def def_relative_columns(df, sum_value, table_path, sep, value_col, groupby_cols=None):
+    """
+    Normalize (make relative) only the selected numeric column (`value_col`).
+    Other numeric columns remain unchanged.
+    """
+
+    # Handle groupby_cols
+    if isinstance(groupby_cols, str):
+        if groupby_cols.lower() == "none":
+            groupby_cols = None
+        else:
+            groupby_cols = [groupby_cols]
     
-    # Ha string és 'none', akkor None-ra alakítjuk
-    if isinstance(groupby_cols, str) and groupby_cols.lower() == "none":
-        groupby_cols = None
 
-    # Ha string, de nem "none", akkor listává alakítjuk
-    if isinstance(groupby_cols, str) and groupby_cols.lower() != "none":
-        groupby_cols = [groupby_cols]
-
-    # Identify numeric columns
+    # Check numeric columns in general (optional full-table check)
     numeric_columns = df.select_dtypes(include=[np.number]).columns
+    check_everything_number(
+        table=df, 
+        table_path=table_path, 
+        value_to_check= value_col,  # check only the selected column
+        parameter="value_col", 
+        sep=sep
+    )
 
-    # Globális normalizáció
-    if groupby_cols is None:
-        normalized_df = df.copy()
-        for column in numeric_columns:
-            total = df[column].sum()
-            normalized_df[column] = (df[column] / total) * float(sum_value) if total != 0 else df[column]
-        return normalized_df
+    # --- Normalization logic ---
+    normalized_df = df.copy()
 
-
-    # Csoportosított normalizáció
     def normalize_group(group):
-        for column in numeric_columns:
-            total = group[column].sum()
-            group[column] = (group[column] / total) * float(sum_value) if total != 0 else group[column]
+        total = group[value_col].sum()
+        group[value_col] = (group[value_col] / total) * float(sum_value) if total != 0 else group[value_col]
         return group
 
-    normalized_df = df.groupby(groupby_cols, group_keys=False).apply(normalize_group)
+    if groupby_cols is None:
+        normalized_df = normalize_group(normalized_df)
+    else:
+        normalized_df = normalized_df.groupby(groupby_cols, group_keys=False).apply(normalize_group)
+
     return normalized_df
+
 
 
 def coerce_cols(merge_cols):
@@ -559,40 +604,52 @@ def list_tsv_csv_files(dir):
     print(colorama.Style.RESET_ALL)
 
 
-
 def list_available_columns(table, separator):
     df = pd.read_csv(table, sep=separator, engine='python')
-    print(colorama.Fore.RED + f"Available column(s) in {table}:")
-    
+
+    type_print(f"Available column(s) in {table}:", color= colorama.Fore.YELLOW)
+
     for col in df.columns:
-        series = df[col].dropna()
+        series = df[col].copy()
+        n_missing = series.isna().sum() + (series.astype(str).str.strip() == '').sum()
 
-        n_numeric = 0
-        n_text = 0
+        # Determine column type
+        series_non_missing = series.dropna()
+        numeric = pd.to_numeric(series_non_missing, errors='coerce')
+        has_numeric = numeric.notna().any()
+        has_non_numeric = numeric.isna().any()
 
-        for val in series:
-            try:
-                float(val)
-                n_numeric += 1
-            except (ValueError, TypeError):
-                n_text += 1
-
-        if n_numeric > 0 and n_text > 0:
+        if has_numeric and has_non_numeric:
             col_type = "MIXED"
             color = colorama.Fore.RED
-        elif n_numeric > 0:
+        elif has_numeric:
             col_type = "numeric"
             color = colorama.Fore.CYAN
-        elif n_text > 0:
+            if n_missing > 0:
+                col_type = "MIXED"
+                color = colorama.Fore.RED 
+        elif has_non_numeric:
             col_type = "text"
             color = colorama.Fore.CYAN
+            if n_missing > 0:
+                col_type = "MIXED"
+                color = colorama.Fore.RED
         else:
             col_type = "unknown"
             color = colorama.Fore.WHITE
 
-        print(color + f"- {col} ({col_type})")
+        # Append missing info
+        if n_missing > 0:
+            col_type += f" with {n_missing} Nan value"
+            if col_type != "MIXED":
+                color = colorama.Fore.YELLOW
+
+        type_print(f"- {col} ({col_type})", color= color, base_speed= 0.007)
 
     print(colorama.Style.RESET_ALL)
+
+
+
 
 
 def validate_separator_type(separator):
@@ -603,6 +660,9 @@ def validate_sep(separator):
 
 def validate_dec(separator):
     return separator in {",", "."}
+
+def validate_sort_mode(sort_mode):
+    return sort_mode in {"decreasing", "increasing"}
 
 def check_table(workdir, table_file, parameter):
     workdir = Path(workdir)
@@ -632,15 +692,63 @@ def col_in_table(table, value_to_check, parameter, table_path, sep):
             raise ValueError(f"Error [{value_to_check}] as --{parameter} column not found!")
     
 def is_not_numeric_column(table, value_to_check, parameter, table_path, sep):
+    if has_nan_values(table[value_to_check]):
+        list_available_columns(str(table_path), sep)
+        raise ValueError(f"Error [{value_to_check}] --{parameter} contains Nan values!")
+    
     if pd.api.types.is_numeric_dtype(table[value_to_check]):
                     list_available_columns(str(table_path), sep)
                     raise ValueError(f"Error [{value_to_check}] --{parameter} should not be numeric!")
     
 def is_numeric_column(table, value_to_check, parameter, table_path, sep):
+    if has_nan_values(table[value_to_check]):
+        list_available_columns(str(table_path), sep)
+        raise ValueError(f"Error [{value_to_check}] --{parameter} contains Nan values!")
+    
     if not pd.api.types.is_numeric_dtype(table[value_to_check]):
                     list_available_columns(str(table_path), sep)
                     raise ValueError(f"Error [{value_to_check}] --{parameter} should be numeric!")
     
+# def has_mixed_column_check(table, parameter, table_path, sep):
+#     for col in table.columns:               
+#             series = table[col]
+#             if has_mixed_column2(series):
+#                 list_available_columns(str(table_path), sep)
+#                 raise ValueError(f"Column {col} --{parameter} has mixed data types, please use consistent columns!")
+            
+
+def has_mixed_column3(series, coerce_numeric=True, treat_empty_str_as_na=True):
+    
+    if not isinstance(series, pd.Series):
+        raise ValueError("has_mixed_column expects a pandas Series (pass table[col])")
+
+    s = series.copy()
+
+    # Normalize "missing" textual forms so they don't pollute type detection
+    if treat_empty_str_as_na:
+        s = s.replace(r'^\s*$', pd.NA, regex=True)        # empty or whitespace -> NA
+        s = s.replace(["NaN", "None"], pd.NA)             # literal strings -> NA
+
+    # Consider only non-missing values for type/mix detection
+    non_na = s.dropna()
+    if non_na.empty:
+        return False  # no non-missing values -> not mixed
+
+    if coerce_numeric:
+        # Convert values that look numeric to numbers; others become NaN
+        numeric_conv = pd.to_numeric(non_na, errors='coerce')
+        has_numeric = numeric_conv.notna().any()
+        has_non_numeric = numeric_conv.isna().any()
+        return has_numeric and has_non_numeric
+    else:
+        # Strict Python-type check (int/float/str/etc.)
+        return non_na.map(type).nunique() > 1
+    
+def has_mixed_column_check(table, table_path, column_to_check, parameter, sep):
+        series = table[column_to_check]
+        if has_mixed_column2(series):
+            list_available_columns(str(table_path), sep)   # show helpful info
+            raise ValueError(f"Column {column_to_check} --{parameter} has mixed data types, please use consistent columns!")   
 
 
 
@@ -659,12 +767,13 @@ def none_parameter(table, value_to_check):
 def empty_column(table, value_to_check, parameter):
     col = table[value_to_check]
 
-    if col.isnull().any():
+    if col.isnull().all():
         raise ValueError(f"Column [{value_to_check}] --{parameter} is empty!")
 
     # ha string típus, akkor trim + üres ellenőrzés
     if pd.api.types.is_string_dtype(col):
-        if (col.str.strip() == "").any():
+        col_str = col.fillna("").astype(str)
+        if (col_str.str.strip() == "").any():
             raise ValueError(f"Column [{value_to_check}] --{parameter} is empty!")
     return False
 
@@ -682,14 +791,22 @@ def check_everything_string(table, table_path, value_to_check, parameter, sep, i
     
     # ha szám a --paraméter
     is_not_numeric_column(table= table, value_to_check= value_to_check, parameter= parameter, table_path= table_path, sep= sep)
+
+    has_mixed_column_check(table= table, table_path= table_path, sep= sep, parameter= parameter, column_to_check= value_to_check)
+
+    
    
 
 def check_everything_number(table, table_path, value_to_check, parameter, sep):
     # nincs --value_col
     col_in_table(table= table, value_to_check = value_to_check, parameter= parameter, table_path = table_path, sep = sep)
              
+    # ha üres --paraméter
+    empty_column(table= table, value_to_check= value_to_check, parameter= parameter)
+    
     # --value_col csak szám lehet
     is_numeric_column(table= table, value_to_check = value_to_check, parameter= parameter, table_path = table_path, sep = sep)
+
                 
 
 def validate_join_type(join_type):
@@ -697,6 +814,9 @@ def validate_join_type(join_type):
 
 def validate_summary_type(join_type):
     return join_type in {"mean", "median", "sum", "min", "max"}
+
+def validate_open_file(join_type):
+    return join_type in {"exit", "main"}
 
 def has_column(table_file, separator):   
     df = pd.read_csv(table_file, sep=separator, engine='python')
@@ -725,3 +845,52 @@ def help_value(default_value):
     return(f"The column containing the values. Default: {str(default_value)}")
 def help_group(default_group):
     return(f"The column containing the groups on which the statistics will be calculated. Default: {str(default_group)}")
+
+
+exit_autofill = WordCompleter(autofill.exit_autofill, ignore_case=True)
+
+def safe_to_csv(table, output_path, separator, decimal):
+    printed_warning = False
+    user_input = None
+
+    while True:
+        try:
+            table.to_csv(output_path, index=False, sep=separator, decimal=decimal)
+            return  # success → stop trying
+
+        except PermissionError:
+            if not printed_warning:
+                type_print(
+                    f"Output file '{output_path}' is open. Waiting until it is closed..." ,color=colorama.Fore.RED)
+                print(colorama.Style.RESET_ALL)
+                
+                printed_warning = True
+
+            user_input = prompt("Close the file and press Enter, or type 'exit' or 'main': ",completer=exit_autofill).strip()
+
+                # If user types something (not empty)
+            if user_input in {"exit", "main"}:
+                    check_exit(user_input)
+                    return 
+
+                       
+    
+def get_language(config_path="language.txt"):
+    path = Path(config_path)
+
+    with open(path, encoding="utf-8") as f:
+        lang = f.read().strip().capitalize()
+
+    return lang
+
+
+def get_local_settings():
+    language = get_language()
+
+    if language == "Magyar":
+        decimal = ","
+
+    else:
+        decimal = "."
+
+    return {"language": language, "decimal": decimal}
