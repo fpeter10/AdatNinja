@@ -56,6 +56,7 @@ def get_user_name(filename="user.txt"):
     return name
 
 language_autofill = WordCompleter(autofill.language_autofill, ignore_case=True)
+language_autofill2 = WordCompleter(autofill.language_autofill2, ignore_case=True)
 
 def save_language(filename="language.txt", force = False):
     valid_languages = {"English", "Magyar"}
@@ -65,7 +66,7 @@ def save_language(filename="language.txt", force = False):
         try:
             with open(filename, "r", encoding="utf-8") as file:
                 language = file.read().strip().capitalize()
-                if language in valid_languages.values():
+                if language in valid_languages:
                     return language
         except FileNotFoundError:
             pass  # No file yet, proceed to prompt user
@@ -74,8 +75,13 @@ def save_language(filename="language.txt", force = False):
                    "This will affect formatting options: decimal separator (comma vs. point).", color= colorama.Fore.CYAN)
         
     while True:
-        language_input = prompt("Language: ", completer=language_autofill).strip()
-        check_exit(language_input)
+        if not force:
+            language_input = prompt("Language: ", completer=language_autofill2).strip()
+            check_exit(language_input)
+
+        if force:
+            language_input = prompt("Language: ", completer=language_autofill).strip()
+            check_exit(language_input)
 
         if language_input in valid_languages:
             with open(filename, "w", encoding="utf-8") as file:

@@ -415,6 +415,8 @@ def main():
 
     welcome()
 
+    myMethods.save_language(force= False)
+
     tracker = ProgramTracker()
     
     workdirectory = get_working_directory()
