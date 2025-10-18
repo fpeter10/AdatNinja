@@ -6,6 +6,7 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 ## Segítség a használatához
 ---
 - Add meg a neved a program indításakor, hogy a Ninja tudjon üdvözölni a napszaknak megfelelően.
+- Válassz, hogy magyar vagy angol stílusú tizedes elválasztót szeretnél.
 - Minden adatot egy mappába kell rakni, a program indításakor lehet mappát választani.
 - Válassz egy parancsot amit végre szeretnél hajtani! A program addig fog kérdezni, amíg minden paraméter nem megfelelő.
 - A ***programs*** paranccsal az elérhető programok nevét írhatod ki.
@@ -39,23 +40,26 @@ Legyen szó szeparátor cseréről, oszlopok szétválasztásáról, táblák ö
 - **Adatok összegzése**  
      ***summarize*** Minden névre és minden csoportra kiszámítja az átlagot, összeget, min, max értéket.
 
+- **Adatok rendezése**  
+     ***sort table*** A táblázat sorait sorba rendezi akár több oszlop alapján is.
+
 - **Oszlopok szétválasztása**  
-      ***split_columns*** Egy összetett oszlopot (pl. `A_B_C`) több külön oszlopra bonthatsz.
+      ***split columns*** Egy összetett oszlopot (pl. `A_B_C`) több külön oszlopra bonthatsz.
 
 - **Oszlopok egyesítése egy komplex oszloppá**  
-      ***merge_columns*** Az önálló oszlopokat (pl. 'A' 'B' 'C') egyesíti egyetlen oszloppá a kiválasztott elválasztóval (pl. 'A_B_C')
+      ***merge columns*** Az önálló oszlopokat (pl. 'A' 'B' 'C') egyesíti egyetlen oszloppá a kiválasztott elválasztóval (pl. 'A_B_C')
 
 - **Hosszú formátummá alakítás**  
-      ***long_format*** A Ninja csak hosszú formátumú adatot tud feldolgozni. Így mindig érdemes átalakítani az ember által olvashatót, a programnak megfelelő alakúvá.
+      ***long format*** A Ninja csak hosszú formátumú adatot tud feldolgozni. Így mindig érdemes átalakítani az ember által olvashatót, a programnak megfelelő alakúvá.
 
 - **Szélés formátummá vissza alakítás**  
-      ***wide_format*** A táblázatot vissza alakítja normál széles formátummá. Fontos, hogy válaszd ki az összes oszlopot amire szükség van.
+      ***wide format*** A táblázatot vissza alakítja normál széles formátummá. Fontos, hogy válaszd ki az összes oszlopot amire szükség van.
   
 - **Szeparátor és tizedesjel módosítás**  
       ***change sep***Könnyedén átalakíthatod a fájlokat különböző elválasztókkal, illetve lehet választani tízedes pont, vagy vessző közül.
   
 - **Tábla kiíratása**  
-      ***print_table*** Ha nem tudod pontosan hogy néz ki a tábla, írasd ki, és kapsz infót az oszlopok típusáról is
+      ***print table*** Ha nem tudod pontosan hogy néz ki a tábla, írasd ki, és kapsz infót az oszlopok típusáról is
 
 
 ## Színes hibakezelés: A hibák, figyelmeztetések színesen jelennek meg a terminálban ha bármilyen nem megfelelő értéket adtál meg. Ezután lehetőséged van javítani a megfelelőre.
@@ -109,6 +113,7 @@ Whether it's changing separators, splitting columns, merging tables, or calculat
 ## How to Use
 ---
 - Enter your name when the program starts so the Ninja can greet you based on the time of day.
+- Choose if you want Hungarian or English style decimal separator.
 - Place all your data in a folder; you can select the folder when starting the program.
 - Choose the command you want to run. The program will keep asking until all parameters are valid.
 - Use the ***programs*** command to list all available programs.
@@ -142,23 +147,26 @@ Whether it's changing separators, splitting columns, merging tables, or calculat
 - **Summarize Data**  
     ***summarize***  Calculate average, sum, min, and max for all names and groups.
 
+- **Sort table**  
+     ***sort table*** Sort table rows based on multiple column into order.
+
 - **Split Columns**  
-    ***split_columns***  Split a complex column (e.g., `A_B_C`) into multiple separate columns.
+    ***split columns***  Split a complex column (e.g., `A_B_C`) into multiple separate columns.
 
 - **Merge Columns**  
-    ***merge_columns***  Combine separate columns (e.g., 'A', 'B', 'C') into one column with a chosen separator (e.g., `A_B_C`).
+    ***merge columns***  Combine separate columns (e.g., 'A', 'B', 'C') into one column with a chosen separator (e.g., `A_B_C`).
 
 - **Convert to Long Format**  
-    ***long_format***  AdatNinja processes only long-format data, so convert wide-format tables to long-format for processing.
+    ***long format***  AdatNinja processes only long-format data, so convert wide-format tables to long-format for processing.
 
 - **Convert to Wide Format**  
-    ***wide_format***  Convert a table back to standard wide format. Make sure to select all required columns.
+    ***wide format***  Convert a table back to standard wide format. Make sure to select all required columns.
 
 - **Change Separator and Decimal**  
     ***change sep***  Easily change the file separator and choose the decimal mark (point or comma).
 
 - **Print Table**  
-    ***print_table***  Preview the table, including column types.
+    ***print table***  Preview the table, including column types.
 
 ---
 
